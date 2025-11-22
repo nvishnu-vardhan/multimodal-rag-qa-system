@@ -58,8 +58,7 @@ with st.sidebar:
     st.header("⚙️ Configuration")
     
     # API Key input
-    api_key = st.text_input("OpenAI API Key", type="password", 
-                           help="Enter your OpenAI API key for LLM processing")
+    api_key = st.text_input("OpenAI API Key", type="password", help="Enter your OpenAI API key for LLM processing")
     
     st.divider()
     
@@ -102,8 +101,10 @@ with st.sidebar:
     if st.session_state.documents_processed:
         st.header("📊 Statistics")
         col1, col2 = st.columns(2)
+        
         with col1:
             st.metric("Documents", len(uploaded_files) if uploaded_files else 0)
+        
         with col2:
             st.metric("Queries", len(st.session_state.chat_history))
 
@@ -118,60 +119,8 @@ with main_tab:
             if "citations" in message:
                 with st.expander("📖 View Citations"):
                     for citation in message["citations"]:
-                        st.markdown(f'<div class="citation-box">{citation}</div>', 
-                                  unsafe_allow_html=True)
-    
-    # Chat input
-    if prompt := st.chat_input("Ask a question about your documents..."):
-        if not st.session_state.documents_processed:
-            st.warning("Please upload and process documents first!")
-        elif not api_key:
-            st.warning("Please enter your OpenAI API key in the sidebar!")
-        else:
-            # Add user message
-            st.session_state.chat_history.append({"role": "user", "content": prompt})
-            with st.chat_message("user"):
-                st.markdown(prompt)
-            
-            # Generate response (placeholder)
-            with st.chat_message("assistant"):
-                with st.spinner("Thinking..."):
-                    # This is a placeholder response
-                    response = f"""Based on the documents, here's what I found:
-                    
-                    This is a placeholder response demonstrating the multi-modal RAG system. 
-                    In a complete implementation, this would:
-                    
-                    1. **Extract** text, tables, and images from your documents
-                    2. **Process** them through OCR and table extraction
-                    3. **Embed** all content into a unified vector space
-                    4. **Retrieve** the most relevant chunks based on your query
-                    5. **Generate** a comprehensive answer with citations
-                    
-                    Your question: "{prompt}"
-                    
-                    *Note: This is a demo. Full implementation requires document processing pipeline.*
-                    """
-                    
-                    st.markdown(response)
-                    
-                    # Mock citations
-                    citations = [
-                        "📄 Document: example.pdf | Page: 5 | Section: 2.3",
-                        "📊 Table: Financial Summary | Source: report.pdf | Page: 12",
-                        "🖼️ Image: Chart Analysis | Context: quarterly_data.pdf | Page: 8"
-                    ]
-                    
-                    with st.expander("📖 View Citations"):
-                        for citation in citations:
-                            st.markdown(f'<div class="citation-box">{citation}</div>', 
-                                      unsafe_allow_html=True)
-                    
-                    st.session_state.chat_history.append({
-                        "role": "assistant", 
-                        "content": response,
-                        "citations": citations
-                    })
+                        st.markdown(f'<div class="citation-box">{citation}</div>',
+                                    unsafe_allow_html=True)
 
 with docs_tab:
     st.header("📚 Processed Documents")
@@ -222,7 +171,6 @@ with about_tab:
     - **Confidence Scores**: Transparency in answer generation
     
     ### 🔧 Technology Stack
-    
     - **Framework**: Streamlit
     - **LLM**: OpenAI GPT-4 / GPT-3.5
     - **Embeddings**: Sentence Transformers, CLIP
@@ -255,3 +203,55 @@ with about_tab:
     
     **Built with ❤️ for advanced document intelligence**
     """)
+
+# Chat input
+if prompt := st.chat_input("Ask a question about your documents..."):
+    if not st.session_state.documents_processed:
+        st.warning("Please upload and process documents first!")
+    elif not api_key:
+        st.warning("Please enter your OpenAI API key in the sidebar!")
+    else:
+        # Add user message
+        st.session_state.chat_history.append({"role": "user", "content": prompt})
+        with st.chat_message("user"):
+            st.markdown(prompt)
+        
+        # Generate response (placeholder)
+        with st.chat_message("assistant"):
+            with st.spinner("Thinking..."):
+                # This is a placeholder response
+                response = f"""Based on the documents, here's what I found:
+
+This is a placeholder response demonstrating the multi-modal RAG system. 
+In a complete implementation, this would:
+
+1. **Extract** text, tables, and images from your documents
+2. **Process** them through OCR and table extraction
+3. **Embed** all content into a unified vector space
+4. **Retrieve** the most relevant chunks based on your query
+5. **Generate** a comprehensive answer with citations
+
+Your question: "{prompt}"
+
+*Note: This is a demo. Full implementation requires document processing pipeline.*
+"""
+                
+                st.markdown(response)
+                
+                # Mock citations
+                citations = [
+                    "📄 Document: example.pdf | Page: 5 | Section: 2.3",
+                    "📊 Table: Financial Summary | Source: report.pdf | Page: 12",
+                    "🖼️ Image: Chart Analysis | Context: quarterly_data.pdf | Page: 8"
+                ]
+                
+                with st.expander("📖 View Citations"):
+                    for citation in citations:
+                        st.markdown(f'<div class="citation-box">{citation}</div>',
+                                    unsafe_allow_html=True)
+                
+                st.session_state.chat_history.append({
+                    "role": "assistant",
+                    "content": response,
+                    "citations": citations
+                })
