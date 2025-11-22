@@ -7,7 +7,6 @@ pypdf2==3.0.1
 python-docx==1.1.0
 pillow>=10.2.0
 pandas>=2.2.0
-pytesseract==0.3.10
 
 # LLM and Embeddings (OpenAI only)
 openai==1.3.5
