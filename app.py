@@ -5,7 +5,7 @@ from typing import List
 import PyPDF2
 from docx import Document
 from PIL import Image
-import pytesseract
+# import pytesseract
 from io import BytesIO
 
 # OpenAI and LangChain
@@ -73,11 +73,12 @@ def extract_text_from_docx(file) -> str:
         return ""
 
 def extract_text_from_image(file) -> str:
-    """Extract text from image using OCR"""
+    """Extract text from image using OCR""""""Extract text from image - OCR currently not available in deployment"""
     try:
-        image = Image.open(BytesIO(file.read()))
-        text = pytesseract.image_to_string(image)
-        return text
+        # Note: pytesseract requires system-level Tesseract OCR installation
+        # which is not available on Streamlit Cloud by default
+        st.warning("Image OCR is not currently available in this deployment. Please upload PDF or DOCX files.")
+        return ""
     except Exception as e:
         st.error(f"Error extracting from image: {str(e)}")
         return ""
