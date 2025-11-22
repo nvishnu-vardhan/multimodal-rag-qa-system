@@ -5,7 +5,6 @@ from typing import List
 import PyPDF2
 from docx import Document
 from PIL import Image
-# import pytesseract
 from io import BytesIO
 
 # OpenAI and LangChain
